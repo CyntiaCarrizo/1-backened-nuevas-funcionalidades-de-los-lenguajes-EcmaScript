@@ -282,3 +282,180 @@ ticketManager1.ponerEventoEnGira(2, "nuevoLugar2", new Date (5/02/2023 ))
 console.log(ticketManager1.getEventos())//[]
 //console.log(ticketManager2.getEventos())//[]
 
+
+
+
+/***********************************CLASE 2) PROGRAMACION SINCRONICA Y ASINCRONICA***** */
+/*FUNCIONES: CONJUNTO DE INSTRUCCIONES para realizar una tarea en particular, con la finalidad de poderla reutilizar facilmente.
+pueden o no recibir parametros. Dichos parametrops pueden ser cualquier tipo de dato, tambien pueden ser funciones. 
+retornan algun valor o tambien pueden retornar otras funciones.
+ordenan el codigo.
+
+1) tradicional: declaradas bajo la sintaxis:
+ function nombre(arg) {
+    return args
+}
+2) arrow function: declaradas bajmo la sintaxis: 
+cmonst nombre = (args) => {
+    return args
+}  
+anonima intrinsicamente
+3)funcion definmida: cuenta con un nombre especifico. Usualmente se usan para no reasignarse.
+4)funcion anonima: no cuenta con nombre, solo implementacion. Son usualmente pensadas para reasignarse o utilizarse. */
+
+//funcion tradicional
+
+function sumar (a,b){
+    //bloque a ejecutar
+    const resultado= a+b
+    console.log(resultado)
+    return (resultado)
+}
+
+//funcion tradicional simplimficada
+
+function sumar2 (a,b){
+   
+    return a+b
+}
+
+
+console.log(sumar(4,5))//9
+console.log(sumar2(8,5))//13
+//funciones flechas o arrow function
+
+const arrowFunction = (a,b) =>{
+    const resultado = a+b
+    console.log(resultado)
+    return resultado
+}
+
+const arrowFunction2 = (a,b) => a+b
+const arrowFunction3 = (a) => a+5
+console.log(arrowFunction(6,6))//12
+console.log(arrowFunction2(8,7))//15
+console.log(arrowFunction3(5))//10
+
+
+/*1)sincronismo o bloqueante: cuando se ejecutan las mfunciones lo hacen una  ala mvez, si x alguna razon una requiere mas tiempo para ejecutarse
+lo que sucede es que todo el poceso se detiene hasta que esa linea se termine de ejecutar.
+
+2) Asincronico o no bloqueante: significa que cada fumncion o tarea seguira el hilo de la resolucion que considere su ritmo. Hay que ser cautelosos 
+al utilizarlas:
+a)No controlamos cuando terminara, solo cuando comienza
+b)Si una tarea depende del resultado de otra, habra problemas, pues esperara su ejecucion en paralelo.
+las operaciones asincromnicas son no bloqueantes, esto significa, que las tareas pueden irse ejecutamndo en paralelo y no esperar por las demas tareas.
+Asi la tarea numero 3 podria terminar imncluso anmtes que la tarea numero 1.
+
+3)Callback:
+Es una funcion como mcualquier otra la diferencia esta en que está se pasa como parametro (argumento) para poder ser utilizada por otra funcion.
+Permiten entonces que las funciones ejecuten operaciones adicionales dentro de si mismas.
+Cuando pasamo un callback, lo hacemos porque no siempre sambemos que queremos que se ejecute en cada casmo de nuestra mfuncion.
+    Algunos ejemplos donde has utilizado callbacks son:
+    1) el metodo onClick en frontend
+    2) metodo forEach
+    3) memtodo map o filter 
+
+convenciones:
+1)El callbacks siempre es el ultimo parametro 
+2)El callback suele ser una funmcion que recibe dos parametros
+3)la funcion llama al callback al terminar de ejecutar todas sus operaciones 
+4)Si la operacion fue exmitosa, la funcion llamara al callback pasanmdo null como primer parametro y si genera algun resultado este se pasara 
+como segundo parametro
+5)Si la operacion resultado es un error, la funcion llamara al callback pasando el error obtenido como primer parametro
+6) Sintaxis de un callbacks: 
+
+const ejemploCallback = (error, resultado) => {
+    if(error){
+        //hacer algo con el error!!
+    }else{
+        //hacer algo con el resultado 
+    }
+}
+*/
+
+function callback(parametro){
+    return `Hola ${parametro}`
+}
+
+function principal (parametro1, cb) {
+    const resultado = cb(parametro1)
+    return resultado
+}
+
+console.log(principal ("pablo", callback))//Hola pablo}
+
+/*En algun momento el mundo laboral te exige hacer mas que una suma o resta. Nos encontraremos con procesos que requieren operaciones de mas pasos.
+Si nosotros trabajamos con callbacks, podemos encadenar un conjunto de operaciones secuenciales. Asi un callback puede llamar a otro callback, 
+y este puede llamar a otra y asi sucesivamente, formandose un callbacks hell.
+*/
+
+/*Promesas: resuleven de alguna manera el problema de asincronia.
+representa la terminación o el fracaso de una operación asíncrona. 
+Son un objeto que contienen un valor ahora, men el futuro mo puede que nunmca este.
+Es un objeto especial que nos permitira encapsular una operacion,la cual reaccionara a dos posibles situacimones dentro de una promesa: 
+1)que dmeberia hacer si la promesa se cumple?
+2)que deberia hacer si la promesa no se cumple?
+Una promesa funciona muy similar al mundo real. Al prometerse algo, es una promesa en estado pendienmte (pending), no sabemos cuando se resolvera
+esa promesa. Sin embargo cuando llega el momento se nos notifica si la promesa se cumplio (fulfilled tambiem lo encontramos como resolve) o talvez
+a pesar del tiempo, al final nos notifiquen que la promesa no pudo cumplirse, se rechazo (reject).
+Podemos crear funciones que devuelvan promesas o consumir funmciones que devuelmven promesas
+  */
+
+//crear promesas
+
+function funcpromesa(a,b){
+    return new Promise ((resolve, reject)=>{
+        if (a===0){
+            reject `promesa rechazada`
+        }else{
+            resolve (a+b)
+        }
+    })
+}
+
+console.log(funcpromesa(5,4)) //Promise{9}
+
+
+//la manipulacion de promesa se hace por medio de .then .catch y async await
+//.then: (si la promesa se resuelve sastifactoria)
+//.catch (promesa rechazada)
+/*Problemas con .then y .catch
+Cuando necesitamos más que sólo una operación para poder ejecutar algo asíncrono, no basta con el uso de una promesa solamente,
+ sino que necesitamos un entorno completo para poder ejecutar dichas operaciones .then en este caso sólo nos sirve para encadenar las promesas 
+ y obtener sus resultados, pero no nos permite un entorno completo asíncrono para trabajar, por lo cual nos obliga a trabajar TODO dentro de ese
+scope.
+Además, el principal problema de los .then y .catch son su encapsulamiento excesivo, impidiendo o limitando que podamos acceder a los recursos
+de algunos resultados, variables, etc.
+*/
+
+
+/*ASYNC AWAIT:  
+Es otra forma de manipular promesas.
+Es unma forma de escribir programacion asincrona como si fuera sincronica. 
+No se necesita anidar.
+async se colocará al inicio de una función, indicando que todo el cuerpo de esa función deberá ejecutarse de manera asíncrona
+await servirá (como indica su nombre) para esperar por el resultado de la promesa y extraer su resultado.
+Al ser operaciones que podrían salir bien, PERO TAMBIÉN MAL, es importante encerrar el cuerpo en un bloque try {} catch {} */
+
+const dividir= (dividiendo, divisor)=>{
+    return new Promise ((resolve, reject)=>{
+        if (divisor === 0) {
+            reject ("No se pueden hacer divisiones entre cero.")
+        } else {
+            resolve(dividiendo/divisor)
+        }
+    })
+}
+
+const funcionAsync = async() =>{
+    try {
+        let resultado = await dividir(10,5)
+        console.log (resultado)
+    } catch (error) {
+        console.log(error)
+    }
+}  
+
+funcionAsync()//2
+
