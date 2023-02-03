@@ -459,3 +459,342 @@ const funcionAsync = async() =>{
 
 funcionAsync()//2
 
+
+
+
+
+/***************************MANEJOS DE ARCHIVOS JS******************/
+/*REPASO:
+Función definida: Función que se declara con un nombre desde el inicio. Usualmente se usan para tareas específicas y no suelen reasignarse.
+
+Función anónima: Función que se declara sin tener un nombre, sino que se asigna a una variable desde el inicio.
+ Se suele utilizar para reasignaciones o para callbacks.
+
+Callback: Bloque de código que encapsula una o más instrucciones, para ser utilizadas en cualquier otro momento del programa
+
+Promesa: Operación asíncrona que tiene dos canales de salida: resolverse o rechazarse. Permiten mejor control que los callbacks
+
+Operación síncrona: Operación bloqueante en la cual, una tarea no puede comenzar hasta que haya finalizado la otra tarea.
+Las operaciones síncronas o bloqueantes, nos sirven cuando necesitamos que las operaciones se ejecuten una detrás de otra,
+ es decir, se utiliza cuando deseamos que las tareas sean secuenciales, independientemente del tiempo que demore cada operación.
+
+
+Operación asíncrona: Operación no bloqueante en la cual se pueden iniciar múltiples tareas independientemente de que no hayan 
+finalizado las tareas previas.
+1)setTimeout se utiliza para establecer un temporizador que ejecute una tarea después de un determinado tiempo. permite entender en un par de
+ líneas la idea del asincronismo.
+  A diferencia de una operación síncrona, podremos notar como setTimeout inicia su ejecución, y una vez que haya transcurrido el tiempo,
+veremos el resultado, aun cuando el resto de las operaciones hayan terminado.
+
+2)setInterval funciona como setTimeout, la diferencia radica en que éste reiniciará el conteo y ejecutará la tarea nuevamente cada vez que 
+se cumpla dicho intervalo de tiempo.
+Un timer devuelve un apagador el cual permite detener el intervalo cuando se cumpla cierta operación.
+Suele utilizarse mucho para poner tiempos límites en alguna página para llenar formularios (Hay ciertas páginas que te dan tiempo límite 
+para hacer la operación, O TE BOTAN).
+*/
+
+
+
+/*console.log("Primer console")
+
+setTimeout(() => {
+    console.log("console setTimeout")
+}, 5000);
+
+console.log("ultimo console")
+
+const { info } = require('console')*/
+
+
+
+/*          Más allá de la memoria… manejo de archivos
+
+    El problema: persistencia de la memoria.
+Cuando comenzamos a manejar más información, nos encontraremos con una de las grandes molestias del programador: tener que comenzar desde 0 cada vez que el programa termina su ejecución.
+Todas las cosas que creamos, movimos o trabajamos desaparecen, ya que sólo persiste en memoria, y esta se borra automáticamente al finalizar el programa.
+El mundo real no te permite eso
+Si tratara de registrar usuarios para la página web de mi empresa ¡imagina si tuviera que hacer una actualización de la página!
+Al actualizar la página (el servidor), necesitaría reiniciarse Y todos los usuarios desaparecerían. Tendríamos que pedirle a cada usuario que vuelva a registrarse y a subir su información.
+¡La solución!
+La primera solución al problema de persistencia en memoria fue guardar la información en archivos. Estos son un conjunto de información que podemos almacenar.
+Así, cuando se requiera nuevamente la información, podemos leer el archivo que habíamos guardado y recuperar la información, aún si el programa había finalizado.
+¡Tu Sistema Operativo funciona así!
+
+
+Implementando archivos en nodejs: fs
+
+        fs en Nodejs
+fs es la abreviación utilizada para FileSystem, el cual, como indica el nombre, es un sistema de manejador de archivos que nos proporcionará 
+node para poder crear, leer, actualizar o eliminar un archivo, sin tener que hacerlo nosotros desde cero. 
+Así, crear un archivo con contenido será tan fácil como escribir un par de líneas de código, en lugar de tener que lidiar con los datos binarios 
+y transformaciones complejas y de un nivel más bajo en la computadora.
+La programación se basa en un principio clave: no reinventes la rueda. Los módulos a utilizar son soluciones ya proporcionadas por otros 
+desarrolladores, con el fin de concentrarnos en la solución de problemas más específicos.
+
+¿Cómo utilizamos el File System de Nodejs en nuestro propio código?
+
+            Utilizando fs
+fs existe desde el momento en el que instalamos Nodejs en nuestro computador, por lo que, para utilizarlo, podemos llamarlo desde cualquier
+archivo que tengamos de nuestro código con la siguiente línea: 
+
+    const fs= requiere("fs")
+
+De ahí en adelante todo el módulo de FileSystem estará contenido en la variable fs. Sólo debemos utilizarlo llamando sus métodos como una clase. Esto podremos hacerlo de 3 formas: síncrono, con callbacks o con promesas.
+Utilizando fs de manera sincrónica
+fs síncrono:
+¡El uso de fs de manera síncrona es bastante sencillo! para ello, sólo utilizaremos la palabra Sync después de cada operación que queramos 
+realizar. Hay muchas operaciones para trabajar con archivos, pero sólo abarcaremos las principales.
+Las principales operaciones que podemos hacer con fs síncrono son:
+writeFileSync = Para escribir contenido en un archivo. Si el archivo no existe, lo crea. Si existe, 
+lo sobreescribe. Se le pasan dos parametros: primero la ruta del archivo y segundo el contenido del archivo 
+readFileSync = Para obtener el contenido de un archivo. Se pasan dos parametros: el primero es la ruta y el segundo
+es el encouding ( utf-8)
+appendFileSync = Para añadir contenido a un archivo. ¡No se sobreescribe!
+unlinkSync = Es el “delete” de los archivos. eliminará todo el archivo, no sólo el contenido.
+existsSync = Corrobora que un archivo exista!*/
+
+
+
+//Sync
+
+const fs = require ('fs')
+
+/*const path = './file1.txt'
+
+if (fs.existsSync(path)) {
+    console.log('Archivo existente')
+    //LEER
+    const info = fs.readFileSync(path, 'utf-8')
+    console.log(info)//Primer texto
+    //ADICIONAR
+    fs.appendFileSync(path, 'Segunmdo texto')
+
+    const infoMod= fs.readFileSync(path, 'utf-8')
+    console.log(infoMod)
+    //ELIMINAR
+    //fs.unlinkSync(path)
+} else {
+    fs.writeFileSync(path,'Primer texto')
+}*/
+
+
+
+
+/* Forma Asincrona: 
+
+    fs con Callbacks
+Funciona muy similar a las operaciones síncronas. Sólo que al final recibirán un último argumento, que como 
+podemos intuir, debe ser un callback.
+Según lo vimos en las convenciones de callbacks de la clase pasada, el primer argumento suele ser un error. 
+Esto permite saber si la operación salió bien, o si salió mal. Sólo readFile maneja un segundo argumento, 
+con el resultado de la lectura del archivo.
+Por último: el manejo por callbacks es totalmente asíncrono, así que cuidado dónde lo usas.
+Las principales operaciones que podemos hacer con fs con callbacks son:
+writeFile = Para escribir contenido en un archivo. Si el archivo no existe, lo crea. Si existe, 
+lo sobreescribe. Al sólo escribir, su callback sólo maneja: (error)=>
+readFile = Para obtener el contenido de un archivo. Como pide información, su callback es de la forma: 
+(error, resultado)=>
+appendFile = Para añadir contenido a un archivo. ¡No se sobreescribe!, al sólo ser escritura, 
+su callback sólo maneja: (error)=>
+unlink = Es el “delete” de los archivos. eliminará todo el archivo, no sólo el contenido.
+Al no retornar contenido, su callback sólo es (error)=>*/
+
+
+
+
+/*const pathCB = './fileCB.txt'
+if (fs.existsSync(pathCB)) {
+        fs.readFile(pathCB, 'utf-8', (error, info)=>{
+            if (error) {
+                console.log('Error de ReadFile',error)
+            } else {
+                console.log(info)//Primer texto CB
+                fs.appendFile(pathCB, 'Segundo texto CB', (error)=>{
+                    if (error) {
+                        console.log(error)
+                    } else {
+                        console.log('Info CB adicionada con exito')//Info CB adicionada con exito
+                       // fs.readFile(pathCB, 'utf-8', (error, info)=>{
+                       //     if (error) {
+                       //         console.log(error)
+                       //     } else {
+                       //         console.log(info)
+                       //         fs.unlink(pathCB, (error)=>{
+                       //             if (error) {
+                        //                console.log(error)
+                       //             } else {
+                       //                 console.log('Archivo CB eliminado con exito ')
+                         //           }
+                          //      })
+                          //  }
+                       // }) 
+                    }
+                })
+            }
+        })
+} else {
+    fs.writeFile(pathCB, 'Primer texto CB', (error)=>{
+        if (error) {
+            console.log(error)
+        } else {
+            console.log('Archivo CB creado con exito')
+        }
+    })
+}*/
+
+
+
+
+
+/*
+fs utilizando promesas:
+
+fs con promesas
+Ya sabemos trabajar con archivos, ya vimos cómo trabajarlos de manera asíncrona, ahora viene el punto más valioso: 
+trabajar con archivos de manera asíncrona, con promesas. esto lo haremos con su propiedad fs.promises
+
+Al colocar a nuestro módulo fs el .promises
+estamos indicando que, la operación que se hará debe ser ejecutada de manera asíncrona, pero en lugar de manipularla 
+con un callback, lo podemos hacer con .then +.catch, o bien con async/await.
+Los argumentos y estructura es casi idéntico al síncrono, por lo tanto sus operaciones principales serán:
+fs.promises.writeFile = Para escribir contenido en un archivo. Si el archivo no existe, lo crea. Si existe, lo sobreescribe.
+fs.promises.readFile = Para obtener el contenido de un archivo.
+fs.promises.appendFile = Para añadir contenido a un archivo. ¡No se sobreescribe!
+fs.promises.unlink= Es el “delete” de los archivos. eliminará todo el archivo, no sólo el contenido.*/
+
+
+
+/*const pathProm= './fileProm.txt'
+
+if (fs.existsSync(pathProm)) {
+    fs.promises.readFile(pathProm, 'utf-8')
+    .then(info=>{console.log(info)
+        return fs.promises.appendFile(pathProm, ' Segundo texto de promesas ')
+    })
+    .then(()=>{
+        console.log('Info de promesa adiciona con exito ')
+            return fs.promises.readFile(pathProm, 'utf-8')
+    })
+  //  .then(info=>{
+  //      console.log(info)
+  //          return fs.promises.unlink(pathProm)
+  //  })
+   // .then(()=>console.log('Archivo de promesa eliminamdo con exito'))
+    .catch(error=>console.log(error))
+} else {
+    fs.promises.writeFile(pathProm, 'Primer texto Promesas')
+    .then(()=>console.log('Archivo de promesa creado con exito'))
+    .catch(error=>console.log(error))
+}*/
+
+
+
+
+/*Manejo de datos complejos con fs.promises
+
+Como ya podrás imaginar, no todo son archivos .txt, y por supuesto que no todo es una cadena de texto simple.
+¿Qué va a pasar cuando queramos guardar el contenido de una variable, aun si esta es un objeto? ¿Y si es un 
+arreglo? Normalmente los archivos que solemos trabajar para almacenamiento, son los archivos de tipo json.
+Para poder almacenar elementos más complejos, nos apoyaremos del elemento JSON.stringify() y JSON. parse()
+    
+JSON.stringify
+Una vez que tenemos el objeto que queremos guardar en el archivo, tenemos que recordar que éste no puede
+ guardarse sólo incrustándolo. Necesitamos convertirlo a formato json, el cual es un formato estándar de 
+ guardado y envío de archivos.
+La sintaxis para hacer la conversión es:
+            JSON.stringify(objetoAconvertir,replacer,'.\t')
+
+JSON.parse
+Ahora que entendemos cómo se convierte un objeto a un JSON, es claro mencionar que JSON.parse representa la
+ operación contraria. Cuando leemos un archivo, el contenido no es manipulable, así que, para recuperar el 
+ objeto que había guardado y no sólo una string representativa de él, entonces hay que transformarlo de vuelta,
+ esto se hace con JSON.parse
+Su sintaxis es:
+            JSON.parse(Json-mque-quiero-transformar-a-objeto)
+
+
+
+Ventajas y desventajas de utilzar archivos
+
+Por qué usarlos:
+Son excelentes para empezar a aprender persistencia, ya que son muy fáciles de usar
+Al ser nativo de node js, no tenemos que hacer instalaciones externas.
+Es muy fácil de manipular dentro o fuera de nuestro programa, además de se transferible.
+
+    Desventajas:
+Conforme la información crece, nos daremos cuenta que, para querer modificar una sola cosa, necesitamos leer
+ todo el archivo, lo cual consume recursos importantes.
+Similar al punto anterior, una vez modificado un dato puntual del archivo, tengo que reescribir el archivo 
+completamente, lo cual es un proceso innecesario y pesado cuando la información es grande.
+Al final, puede ser peligroso tener toda la información en un archivo fácilmente extraíble con un drag&drop a
+ otra carpeta.
+*/
+
+const productos =[
+    {
+        nombre: 'Iphone',
+        stock: 500,
+        precio: 1500,
+    },
+    {
+        nombre: 'Ipad',
+        stock: 25,
+        precio: 900,
+    }
+]
+
+const pathJSON = './fileJson.json'
+
+//fs.writeFileSync(pathJSON, JSON.stringify(productos))
+const info= fs.readFileSync(pathJSON, 'utf-8')
+console.log(info)//la const productos viene con formato texto plano JSON
+const infoJS= JSON.parse(info)
+console.log(infoJS)//la consta producto viene como una arreglo de objetos, pudiendo asi aplicar metodos
+
+
+
+/*ACTIVIDAD
+
+Se creara una clase que permita gestionar usuarios usando fs.promises, este debera contar solo con dos metodos:
+Crear un Usuario y Consultar los usuarios guardados.
+a)El Manager debe vivir en una clase en un archivo externo llamado ManagerUsuarios.js
+b)el metodo CrearUsuario debe recibir un objeto mcon los campos:
+nombre, apellido, edad, curso.
+El metodo debe guarduar un usuario en mun archivo Usuarios.json. Deben guardarlos dentrmo de un  arreglo, ya que se 
+trabajaran con multiples usuarios.
+c)El metodo ConsultarUsuarios debe poder leer un archivmo Usuarios.json y devolver el arreglo corresponmdiente a esos 
+usuarios.
+*/
+
+/*Actividad a entregar:
+
+a)Realizar una clase de nombre “ProductManager”, el cual permitirá trabajar con múltiples productos. Éste debe poder 
+agregar, consultar, modificar y eliminar un producto y manejarlo en persistencia de archivos (basado en entregable 1).
+b)La clase debe contar con una variable this.path, el cual se inicializará desde el constructor y debe recibir la ruta
+a trabajar desde el momento de generar su instancia.
+c)Debe guardar objetos con el siguiente formato:
+id (se debe incrementar automáticamente, no enviarse desde el cuerpo)
+title (nombre del producto)
+description (descripción del producto)
+price (precio)
+thumbnail (ruta de imagen)
+code (código identificador)
+stock (número de piezas disponibles)
+d)Debe tener un método addProduct el cual debe recibir un objeto con el formato previamente especificado,
+ asignarle un id autoincrementable y guardarlo en el arreglo (recuerda siempre guardarlo como un array en el archivo).
+e)Debe tener un método getProducts, el cual debe leer el archivo de productos y devolver todos los productos en formato 
+de arreglo.
+f)Debe tener un método getProductById, el cual debe recibir un id, y tras leer el archivo, debe buscar el producto con 
+el id especificado y devolverlo en formato objeto
+g)Debe tener un método updateProduct, el cual debe recibir el id del producto a actualizar, así también como el campo
+ a actualizar (puede ser el objeto completo, como en una DB), y debe actualizar el producto que tenga ese id en el archivo. NO DEBE BORRARSE SU ID 
+h)Debe tener un método deleteProduct, el cual debe recibir un id y debe eliminar el producto que tenga ese id en el 
+archivo.
+
+Formato del entregable
+
+Archivo de javascript con el nombre ProductManager.js
+
+ */
+
+
